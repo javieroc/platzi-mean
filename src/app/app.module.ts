@@ -13,6 +13,7 @@ import { MomentModule } from 'angular2-moment';
 // Components
 import { AppComponent } from './app.component';
 import { QuestionDetailComponent } from './question/question-detail.component';
+import { QuestionListComponent } from './question/question-list.component';
 import { AnswerFormComponent } from './answer/answer-form.component';
 import { SigninScreenComponent } from './auth/signin-screen.component';
 import { SignupScreenComponent } from './auth/signup-screen.component';
@@ -22,6 +23,7 @@ import { SignupScreenComponent } from './auth/signup-screen.component';
   declarations: [
     AppComponent,
     QuestionDetailComponent,
+    QuestionListComponent,
     AnswerFormComponent,
     SigninScreenComponent,
     SignupScreenComponent
