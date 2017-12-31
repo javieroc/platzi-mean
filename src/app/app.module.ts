@@ -10,10 +10,14 @@ import 'hammerjs';
 // Moment
 import { MomentModule } from 'angular2-moment';
 
+// Routing
+import { AppRoutingModule } from './app-routing.module';
+
 // Components
 import { AppComponent } from './app.component';
 import { QuestionDetailComponent } from './question/question-detail.component';
 import { QuestionListComponent } from './question/question-list.component';
+import { QuestionFormComponent } from './question/question-form.component';
 import { AnswerFormComponent } from './answer/answer-form.component';
 import { SigninScreenComponent } from './auth/signin-screen.component';
 import { SignupScreenComponent } from './auth/signup-screen.component';
@@ -26,7 +30,8 @@ import { SignupScreenComponent } from './auth/signup-screen.component';
     QuestionListComponent,
     AnswerFormComponent,
     SigninScreenComponent,
-    SignupScreenComponent
+    SignupScreenComponent,
+    QuestionFormComponent,
   ],
   imports: [
     BrowserModule,
@@ -34,7 +39,8 @@ import { SignupScreenComponent } from './auth/signup-screen.component';
     MaterialModule,
     MomentModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    AppRoutingModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
