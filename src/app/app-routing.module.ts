@@ -5,9 +5,11 @@ import { QuestionListComponent } from './question/question-list.component';
 import { SigninScreenComponent } from './auth/signin-screen.component';
 import { SignupScreenComponent } from './auth/signup-screen.component';
 
+import { QuestionRoutes } from './question/question.routing';
+
 const routes: Routes = [
-  { path: '', redirectTo: '/home', pathMatch: 'full' },
-  { path: 'home', component: QuestionListComponent },
+  { path: '', redirectTo: '/questions', pathMatch: 'full' },
+  { path: 'questions', children: QuestionRoutes },
   { path: 'signin', component: SigninScreenComponent },
   { path: 'signup', component: SignupScreenComponent },
 ];
