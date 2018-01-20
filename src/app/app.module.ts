@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpModule } from '@angular/http';
 
 // Material angular
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -41,6 +42,7 @@ import { SignupScreenComponent } from './auth/signup-screen.component';
     FormsModule,
     ReactiveFormsModule,
     AppRoutingModule,
+    HttpModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
