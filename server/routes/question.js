@@ -4,7 +4,7 @@ const app = express.Router();
 
 const question = {
   _id: 1,
-  tittle: '¿Cómo reutilizo un componente en Android?',
+  title: '¿Cómo reutilizo un componente en Android?',
   description: 'Miren esta es mi pregunta',
   createdAt: new Date(),
   icon: 'devicon-android-plain',
@@ -21,6 +21,24 @@ const questions = new Array(10).fill(question);
 
 app.get('/', (req, res) => res.status(200).json(questions));
 
-app.get('/:id', (req, res) => res.status(200).json(question));
+app.get('/:id', (req, res) => {
+  const { id } = req.params;
+  const q = questions.find(({ _id }) => _id === +id);
+  res.status(200).json(q);
+});
+
+app.post('/', (req, res) => {
+  const question = req.body;
+  question._id = +new Date();
+  question.user = {
+    email: 'test@gmail.com',
+    password: '12345',
+    firstName: 'test',
+    lastName: 'test',
+  };
+  question.answers = [];
+  questions.push(question);
+  res.status(200).json(question);
+});
 
 export default app;
