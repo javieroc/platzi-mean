@@ -4,6 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/Rx';
 import urljoin from 'url-join';
 import { Question } from './question.model';
+import { Answer} from '../answer/answer.model';
 import { environment } from '../../environments/environment';
 
 @Injectable()
@@ -34,6 +35,26 @@ export class QuestionService {
     const headers = new Headers({ 'Content-Type': 'application/json'});
 
     return this.http.post(this.questionsUrl, body, { headers })
+      .map((response: Response) => response.json())
+      .catch((error: Response) => Observable.throw(error.json()));
+  }
+
+  addAnswer(answer: Answer) {
+    const a = {
+      description: answer.description,
+      question: {
+        _id: answer.question._id,
+      }
+    };
+    const body = JSON.stringify(a);
+    const headers = new Headers({ 'Content-Type': 'application/json' });
+
+    const url = urljoin(
+      this.questionsUrl,
+      answer.question._id,
+      'answers'
+    );
+    return this.http.post(url, body, { headers })
       .map((response: Response) => response.json())
       .catch((error: Response) => Observable.throw(error.json()));
   }
