@@ -36,7 +36,22 @@ export class AuthService {
     return this.http.post(urljoin(this.userUrl, 'signin'), body, { headers })
       .map((response: Response) => {
         const json = response.json();
-        console.log('server data', json);
+        this.login(json);
+        return json;
+      })
+      .catch((error: Response) => {
+        console.log(error);
+        return Observable.throw(error.json());
+      });
+  }
+
+  signup(user: User) {
+    const body = JSON.stringify(user);
+
+    const headers = new Headers({ 'Content-Type': 'application/json' });
+    return this.http.post(urljoin(this.userUrl, 'signup'), body, { headers })
+      .map((response: Response) => {
+        const json = response.json();
         this.login(json);
         return json;
       })

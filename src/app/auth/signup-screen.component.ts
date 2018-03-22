@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { User } from './user.model';
+import { AuthService } from './auth.service';
 
 @Component({
   selector: 'app-signup-screen',
@@ -11,7 +13,10 @@ export class SignupScreenComponent implements OnInit {
 
   signupForm: FormGroup;
 
-  constructor() { }
+  constructor(
+    private router: Router,
+    private authService: AuthService
+  ) {}
 
   ngOnInit() {
     this.signupForm = new FormGroup({
@@ -35,7 +40,11 @@ export class SignupScreenComponent implements OnInit {
     if (this.signupForm.valid) {
       const { firstName, lastName, email, password } = this.signupForm.value;
       const user = new User(email, password, firstName, lastName);
-      console.log(user);
+      this.authService.signup(user)
+        .subscribe(
+          () => this.router.navigateByUrl('/'),
+          err => console.log(err)
+        );
     }
   }
 }
