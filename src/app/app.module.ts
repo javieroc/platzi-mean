@@ -14,6 +14,9 @@ import { MomentModule } from 'angular2-moment';
 // Routing
 import { AppRoutingModule } from './app-routing.module';
 
+// Services
+import { AuthService } from './auth/auth.service';
+
 // Components
 import { AppComponent } from './app.component';
 import { QuestionDetailComponent } from './question/question-detail.component';
@@ -44,7 +47,7 @@ import { SignupScreenComponent } from './auth/signup-screen.component';
     AppRoutingModule,
     HttpModule,
   ],
-  providers: [],
+  providers: [AuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

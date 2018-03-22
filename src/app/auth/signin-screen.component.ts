@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { User } from './user.model';
+import { AuthService } from './auth.service';
 
 @Component({
   selector: 'app-signin-screen',
@@ -11,7 +13,10 @@ export class SigninScreenComponent implements OnInit {
 
   signinForm: FormGroup;
 
-  constructor() { }
+  constructor(
+    private authService: AuthService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     this.signinForm = new FormGroup({
@@ -29,7 +34,11 @@ export class SigninScreenComponent implements OnInit {
     if (this.signinForm.valid) {
       const { email, password } = this.signinForm.value;
       const user = new User(email, password);
-      console.log(user);
+      this.authService.signin(user)
+        .subscribe(
+          () => this.router.navigateByUrl('/'),
+          err => console.log(err)
+        );
     }
   }
 }
