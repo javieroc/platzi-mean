@@ -3,6 +3,7 @@ import {
   required,
   questionMiddleware,
   questionsMiddleware,
+  questions,
 } from '../middleware';
 
 const app = express.Router();
