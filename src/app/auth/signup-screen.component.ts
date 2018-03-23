@@ -43,7 +43,7 @@ export class SignupScreenComponent implements OnInit {
       this.authService.signup(user)
         .subscribe(
           () => this.router.navigateByUrl('/'),
-          err => console.log(err)
+          this.authService.handleError
         );
     }
   }
