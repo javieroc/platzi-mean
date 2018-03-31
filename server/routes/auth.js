@@ -1,13 +1,15 @@
 import express from 'express';
 import Debug from 'debug';
 import jwt from 'jsonwebtoken';
+import {
+  hashSync as hash,
+  compareSync as comparePasswords
+} from 'bcryptjs';
 import { secret } from '../config';
-import { findUserByEmail, users } from '../middleware';
+import { User } from '../models';
 
 const app = express.Router();
 const debug = new Debug('platzi-overflow:auth');
-
-const comparePassword = (password, userPassword) => password === userPassword;
 
 const createToken = user => jwt.sign(
   { user },
@@ -22,16 +24,16 @@ const handleLoginFailed = (res, message) => {
   });
 }
 
-app.post('/signin', (req, res, next) => {
+app.post('/signin', async (req, res, next) => {
   const { email, password } = req.body;
-  const user = findUserByEmail(email);
+  const user = await User.findOne({ email });
 
   if (!user) {
     debug(`User with email ${email} not found`);
     return handleLoginFailed(res);
   }
 
-  if (!comparePassword(password, user.password)) {
+  if (!comparePasswords(password, user.password)) {
     debug(`Passwords do not match ${password} !== ${user.password}`);
     return handleLoginFailed(res, 'El correo y la contraseña no coinciden.');
   }
@@ -48,7 +50,7 @@ app.post('/signin', (req, res, next) => {
   });
 });
 
-app.post('/signup', (req, res) => {
+app.post('/signup', async (req, res) => {
   const {
     firstName,
     lastName,
@@ -56,24 +58,23 @@ app.post('/signup', (req, res) => {
     password,
   } = req.body;
 
-  const user = {
-    _id: +new Date(),
+  const u = new User({
     firstName,
     lastName,
     email,
-    password,
-  };
+    password: hash(password, 10),
+  });
 
-  users.push(user);
+  const user = await u.save();
   const token = createToken(user);
 
   res.status(201).json({
     message: 'User saved',
     token,
     userId: user._id,
-    firstName,
-    lastName,
-    email,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    email: user.email,
   });
 });
 

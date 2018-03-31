@@ -27,6 +27,7 @@ const QuestionSchema = new Schema({
     type: [{
       type: Schema.Types.ObjectId,
       ref: 'Answer',
+      default: [],
     }],
   },
 });

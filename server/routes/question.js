@@ -1,36 +1,54 @@
 import express from 'express';
-import {
-  required,
-  questionMiddleware,
-  questionsMiddleware,
-  questions,
-} from '../middleware';
+import { required } from '../middleware';
+import { question } from '../db-api';
+import { handleError } from '../utils';
+import { User } from '../models';
 
 const app = express.Router();
 
-app.get('/', questionsMiddleware, (req, res) => res.status(200).json(req.questions));
-
-app.get('/:id', questionMiddleware, (req, res) => {
-  res.status(200).json(req.question);
+app.get('/', async (req, res) => {
+  try {
+    const questions = await question.findAll();
+    res.status(200).json(questions);
+  } catch (error) {
+    handleError(error, res);
+  }
 });
 
-app.post('/', required, (req, res) => {
-  const question = req.body;
-  question._id = +new Date();
-  question.user = req.user;
-  question.answers = [];
-  questions.push(question);
-  res.status(200).json(question);
+app.get('/:id', async (req, res) => {
+  try {
+    const q = await question.findById(req.params.id)
+    res.status(200).json(q);
+  } catch (error) {
+    handleError(error, res);
+  }
 });
 
-app.post('/:id/answers', required, questionMiddleware, (req, res) => {
-  const answer = req.body;
-  answer.createdAt = new Date();
-  answer.user = req.user;
-  const q = req.question;
-  q.answers.push(answer);
+app.post('/', required, async (req, res) => {
+  try {
+    const { title, description, icon } = req.body;
+    const q = await question.create({
+      title,
+      description,
+      icon,
+      user: req.user._id,
+    });
+    res.status(200).json(q);
+  } catch (error) {
+    handleError(error, res);
+  }
+});
 
-  res.status(201).json(answer);
+app.post('/:id/answers', required, async (req, res) => {
+  try {
+    const q = await question.findById(req.params.id);
+    const a = req.body;
+    a.user = new User(req.user);
+    const answer = await question.createAnswer(q, a);
+    res.status(201).json(answer);
+  } catch (error) {
+    handleError(error, res);
+  }
 });
 
 export default app;

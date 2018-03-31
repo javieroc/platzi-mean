@@ -10,6 +10,11 @@ const AnswerSchema = new Schema({
     default: Date.now,
     required: true,
   },
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
+  },
 });
 
 export default mongoose.model('Answer', AnswerSchema);
